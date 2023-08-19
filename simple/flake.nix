@@ -1,6 +1,6 @@
 {
   inputs = {
-    kubenix.url = "github:hall/kubenix";
+    kubenix.url = "github:matejc/kubenix";
   };
   outputs = { kubenix, ... }:
   let
