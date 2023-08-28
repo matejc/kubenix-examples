@@ -9,11 +9,16 @@
   outputs = { nixpkgs, kubenix, ... }:
   let
     system = "x86_64-linux";
-    pkgs = nixpkgs.legacyPackages.${system};
-  in {
-    packages.${system} = (kubenix.evalModules.${system} {
+    pkgs = import nixpkgs { inherit system; };
+    result = kubenix.evalModules.${system} {
       module = import ./module.nix;
       specialArgs = { inherit pkgs; };
-    }).config;
+    };
+  in {
+    packages.${system} = {
+      default = result.config.kubernetes.result;
+      copy = result.config.docker.copyScript;
+      nginx = result.config.docker.images.nginx.image;
+    };
   };
 }

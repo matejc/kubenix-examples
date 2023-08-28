@@ -18,7 +18,7 @@ let
     }
   '';
 
-  index = writeTextDir "var/lib/html/index.html" ''
+  indexHtml = writeTextDir "var/lib/html/index.html" ''
     <html>
       <body>
         <h1>Hello from image demo!</h1>
@@ -28,7 +28,7 @@ let
 in
 dockerTools.buildLayeredImage {
   name = "nginx";
-  contents = [ nginx nginxConf index ];
+  contents = [ nginx nginxConf indexHtml ];
   extraCommands = ''
     mkdir -p etc
     mkdir -p var/log/nginx

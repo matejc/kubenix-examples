@@ -2,18 +2,18 @@
 {
   imports = with kubenix.modules; [ k8s docker ];
 
-  #kubernetes.project = "image-demo";
+  kubenix.project = "image-demo";
   kubernetes.version = "1.26";
 
-  kubernetes.namespace = "image";
-  kubernetes.resources.namespaces.image = { };
+  kubernetes.namespace = "image-demo";
+  kubernetes.resources.namespaces.image-demo = { };
 
   docker = {
     registry.url = "localhost";
-    images.example.image = pkgs.callPackage ./image.nix { };
+    images.nginx.image = pkgs.callPackage ./image.nix { };
   };
 
-  kubernetes.resources.pods.example.spec.containers = {
-    custom.image = config.docker.images.example.path;
+  kubernetes.resources.pods.nginx.spec.containers = {
+    main.image = config.docker.images.nginx.path;
   };
 }

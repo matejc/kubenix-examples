@@ -9,11 +9,12 @@
   outputs = { nixpkgs, kubenix, ... }:
   let
     system = "x86_64-linux";
-    pkgs = import nixpkgs { };
-  in {
-    packages.${system}.default = (kubenix.evalModules.${system} {
+    pkgs = import nixpkgs { inherit system; };
+    result = kubenix.evalModules.${system} {
       module = import ./module.nix;
       specialArgs = { inherit pkgs; };
-    }).config.kubernetes.result;
+    };
+  in {
+    packages.${system}.default = result.config.kubernetes.result;
   };
 }

@@ -4,10 +4,9 @@
 
   kubenix.project = "simple-demo";
   kubernetes.version = "1.26";
-  kubernetes.enableHashedNames = true;
 
-  kubernetes.namespace = "simple";
-  kubernetes.resources.namespaces.simple = { };
+  kubernetes.namespace = "simple-demo";
+  kubernetes.resources.namespaces.simple-demo = { };
 
   kubernetes.resources = {
     deployments.nginx.spec = {
@@ -26,8 +25,8 @@
             };
           };
           volumes = {
-            config.configMap.name = config.kubernetes.resources.configMaps.nginx-config.metadata.name;
-            static.configMap.name = config.kubernetes.resources.configMaps.nginx-static.metadata.name;
+            config.configMap.name = "nginx-config";
+            static.configMap.name = "nginx-static";
           };
         };
       };

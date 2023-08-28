@@ -1,22 +1,22 @@
-{ kubenix, pkgs, ... }:
+{ kubenix, pkgs, config, ... }:
 with pkgs.lib;
 let
   secretKey = "my very secret key";
 in {
   imports = with kubenix.modules; [ helm k8s ];
 
-  kubernetes.project = "helm-demo";
+  kubenix.project = "helm-demo";
   kubernetes.version = "1.26";
 
-  kubernetes.namespace = "helm";
-  kubernetes.resources.namespaces.helm = { };
+  kubernetes.namespace = "helm-demo";
+  kubernetes.resources.namespaces.helm-demo = { };
 
   kubernetes.helm.releases.searxng = {
     chart = kubenix.lib.helm.fetch {
       chart = "searxng";
       repo = "https://charts.searxng.org";
       version = "1.0.0";
-      sha256 = "";
+      sha256 = "sha256-ovrMVk+g6fYrgUgAyI/UV7ERjImodQxzotBfbwXlL38=";
     };
     values = {
       env.INSTANCE_NAME = "searxng";
@@ -35,6 +35,6 @@ in {
 
   kubernetes.resources.pods.searxng-redis-test-connection.spec.containers.wget = {
     command = mkForce [ "nc" ];
-    args = mkForce [ "-z" "searxng-redis.${namespace}" "6379" ];
+    args = mkForce [ "-z" "searxng-redis.${config.kubernetes.namespace}" "6379" ];
   };
 }
